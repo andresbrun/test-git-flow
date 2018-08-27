@@ -21,6 +21,11 @@ or alternatively using `brew cask install fastlane`
 fastlane ios release_start
 ```
 Create a new release candidate version. i.e: bundle exec fastlane release_start version:7.1.2
+### ios release_update
+```
+fastlane ios release_update
+```
+
 ### ios release_finish
 ```
 fastlane ios release_finish
