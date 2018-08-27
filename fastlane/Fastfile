@@ -62,7 +62,7 @@ platform :ios do
   end
 
 
-  private_lane :change_and_commit_version do |params|
+  private_lane :change_and_commit_version do |params| 
     version = params[:version]
     bump_version(version: version)
     sh("git commit -a -m \"Bump project to version #{version}\"")
@@ -78,5 +78,11 @@ platform :ios do
     if `git diff`.length > 0 
       sh("git commit -a -m \"Updating translations\"")  
     end
+  end
+
+  desc "Bump project version. i.e: bundle exec fastlane bump_version version:\"7.1.2\""
+  private_lane :bump_version do |params|
+    version = params[:version]
+    sh("agvtool new-marketing-version #{version}")
   end
 end
