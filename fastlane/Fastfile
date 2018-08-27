@@ -94,3 +94,8 @@ platform :ios do
     sh("cd .. ; agvtool new-marketing-version #{version} ; cd fastlane")
   end
 end
+
+after_all do |lane|
+  reset_git_repo
+  clean_build_artifacts
+end
