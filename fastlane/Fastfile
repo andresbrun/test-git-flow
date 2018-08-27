@@ -29,7 +29,13 @@ platform :ios do
 
     change_and_commit_version(version: version)
     git_push(branch: "release/#{version}")
+
+    release_update
   end
+
+  lane :release_update do |params|
+  	# upload metadata
+  end  
 
   desc "Merges the release branch into master & develop, then it deletes it. i.e: bundle exec fastlane release_finish version:7.1.2"
   lane :release_finish do |params|
@@ -67,7 +73,7 @@ platform :ios do
   desc "Params: Version"
   private_lane :change_and_commit_version do |params| 
     version = params[:version]
-    bump_version(version: version)
+    change_marketing_version(version: version)
     sh("git commit -am \"Bump project to version #{version}\"")
   end
 
@@ -89,7 +95,7 @@ platform :ios do
   end
 
   desc "Bump project version. i.e: bundle exec fastlane bump_version version:\"7.1.2\""
-  private_lane :bump_version do |params|
+  private_lane :change_marketing_version do |params|
     version = params[:version]
     sh("cd .. ; agvtool new-marketing-version #{version} ; cd fastlane")
   end
