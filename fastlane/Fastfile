@@ -53,7 +53,7 @@ platform :ios do
 
     version = params[:version]
     branch = "hotfix/#{version}"
-    sh("git flow hotfix start #{branch}")
+    sh("git flow hotfix start #{version}")
 
     change_and_commit_version(version: version)
     git_push(branch: branch)
@@ -66,7 +66,7 @@ platform :ios do
     version = params[:version]
     branch = "hotfix/#{version}"
 
-    sh("git flow hotfix finish -m 'hotfix/#{version}' #{branch}")
+    sh("git flow hotfix finish -m 'hotfix/#{version}' #{version}")
   end
 
 
