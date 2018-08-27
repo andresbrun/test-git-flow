@@ -83,6 +83,6 @@ platform :ios do
   desc "Bump project version. i.e: bundle exec fastlane bump_version version:\"7.1.2\""
   private_lane :bump_version do |params|
     version = params[:version]
-    sh("agvtool new-marketing-version #{version}")
+    sh("cd.. ; agvtool new-marketing-version #{version}")
   end
 end
