@@ -83,7 +83,7 @@ platform :ios do
 	out_file.puts("Translations")
 	out_file.close
 
-    if `git diff`.length > 0 
+    unless `git status`.include? "nothing to commit" then
       sh("git commit -a -m \"Updating translations\"")  
     end
   end
