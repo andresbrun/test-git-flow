@@ -28,6 +28,7 @@ platform :ios do
     update_translations
 
     change_and_commit_version(version: version)
+    git_push(branch: "release/#{version}")
   end
 
   desc "Merges the release branch into master & develop, then it deletes it. i.e: bundle exec fastlane release_finish version:7.1.2"
@@ -49,6 +50,7 @@ platform :ios do
     sh("git flow hotfix start #{branch}")
 
     change_and_commit_version(version: version)
+    git_push(branch: branch)
   end
 
   desc "Close a previous hotfix version. i.e: bundle exec fastlane hotfix_finish version:7.1.2"
@@ -62,11 +64,17 @@ platform :ios do
   end
 
 
+  desc "Params: Version"
   private_lane :change_and_commit_version do |params| 
     version = params[:version]
     bump_version(version: version)
     sh("git commit -a -m \"Bump project to version #{version}\"")
-    sh("git push")
+  end
+
+  desc "Params: Branch"
+  private_lane :git_push do |params|
+    branch = params[:branch]
+    sh("git push --set-upstream origin #{branch}")
   end
 
   private_lane :update_translations do 
