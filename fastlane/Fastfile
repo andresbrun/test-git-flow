@@ -1,0 +1,84 @@
+# This file contains the fastlane.tools configuration
+# You can find the documentation at https://docs.fastlane.tools
+#
+# For a list of all available actions, check out
+#
+#     https://docs.fastlane.tools/actions
+#
+# For a list of all available plugins, check out
+#
+#     https://docs.fastlane.tools/plugins/available-plugins
+#
+
+# Uncomment the line if you want fastlane to automatically update itself
+# update_fastlane
+
+default_platform(:ios)
+
+platform :ios do
+
+  desc "Create a new release candidate version. i.e: bundle exec fastlane release_start version:7.1.2"
+  lane :release_start do |params|
+    ensure_git_status_clean
+
+    version = params[:version]
+
+    sh("git flow release start #{version}")
+
+    update_translations
+
+    change_and_commit_version(version: version)
+
+    upload_metadata(params)
+  end
+
+  desc "Merges the release branch into master & develop, then it deletes it. i.e: bundle exec fastlane release_finish version:7.1.2"
+  lane :release_finish do |params|
+    ensure_git_status_clean
+
+    version = params[:version]
+    sh("git checkout master")
+    sh("git checkout merge release/#{version}")
+    sh("git flow release finish #{version}")
+  end
+
+  desc "Create a new hotfix version from master. i.e: bundle exec fastlane hotfix_start version:7.1.2"
+  lane :hotfix_start do |params|
+    ensure_git_status_clean
+
+    version = params[:version]
+    branch = "hotfix/#{version}"
+    sh("git flow hotfix start #{branch}")
+
+    change_and_commit_version(version: version)
+  end
+
+  desc "Close a previous hotfix version. i.e: bundle exec fastlane hotfix_finish version:7.1.2"
+  lane :hotfix_finish do |params|
+    ensure_git_status_clean
+
+    version = params[:version]
+    branch = "hotfix/#{version}"
+
+    sh("git flow hotfix finish #{branch}")
+  end
+
+
+  private_lane :change_and_commit_version |params| do
+    version = params[:version]
+    bump_version(version: version)
+    sh("git commit -a -m \"Bump project to version #{version}\"")
+    sh("git push")
+  end
+
+  private_lane :update_translations do 
+
+  	out_file = File.new("out.txt", "w")
+	out_file.puts("Translations")
+	out_file.close
+
+    if `git diff`.length > 0 
+      sh("git commit -a -m \"Updating translations\"")  
+    end
+  end
+end
