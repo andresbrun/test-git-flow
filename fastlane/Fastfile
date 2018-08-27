@@ -28,8 +28,6 @@ platform :ios do
     update_translations
 
     change_and_commit_version(version: version)
-
-    upload_metadata(params)
   end
 
   desc "Merges the release branch into master & develop, then it deletes it. i.e: bundle exec fastlane release_finish version:7.1.2"
@@ -64,7 +62,7 @@ platform :ios do
   end
 
 
-  private_lane :change_and_commit_version |params| do
+  private_lane :change_and_commit_version do |params|
     version = params[:version]
     bump_version(version: version)
     sh("git commit -a -m \"Bump project to version #{version}\"")
