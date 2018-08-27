@@ -44,7 +44,7 @@ platform :ios do
     version = params[:version]
     sh("git checkout master")
     sh("git checkout merge release/#{version}")
-    sh("git flow release finish #{version}")
+    sh("git flow release finish #{version} -m 'Release #{version}'")
   end
 
   desc "Create a new hotfix version from master. i.e: bundle exec fastlane hotfix_start version:7.1.2"
