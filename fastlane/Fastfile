@@ -68,7 +68,7 @@ platform :ios do
   private_lane :change_and_commit_version do |params| 
     version = params[:version]
     bump_version(version: version)
-    sh("git commit -a -m \"Bump project to version #{version}\"")
+    sh("git commit -am \"Bump project to version #{version}\"")
   end
 
   desc "Params: Branch"
@@ -84,7 +84,7 @@ platform :ios do
 	out_file.close
 
     unless `git status`.include? "nothing to commit" then
-      sh("git commit -a -m \"Updating translations\"")  
+      sh("git commit -am \"Updating translations\"")  
     end
   end
 
