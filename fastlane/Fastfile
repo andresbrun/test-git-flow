@@ -37,7 +37,7 @@ platform :ios do
 
     version = params[:version]
     sh("git checkout master")
-    sh("git checkout merge release/#{version}")
+    sh("git merge release/#{version}")
     sh("git flow release finish #{version}")
   end
 
